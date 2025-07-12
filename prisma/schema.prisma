@@ -53,6 +53,7 @@ model User {
   clothes        ClothesItem[]
   swaps          Swap[]
   acceptedSwaps  Swap[]   @relation("AcceptedBy")
+  cart           Cart?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }
@@ -73,6 +74,7 @@ model ClothesItem {
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   swaps       Swap[]
   requestedSwaps Swap[] @relation("RequestedItem")
+  cartItems   CartItem[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -90,6 +92,28 @@ model Swap {
   acceptedByUser User?   @relation("AcceptedBy", fields: [acceptedBy], references: [id], onDelete: SetNull)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+}
+
+model Cart {
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String     @unique
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items     CartItem[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model CartItem {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  cartId       String
+  cart         Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  clothesItemId String
+  clothesItem  ClothesItem @relation(fields: [clothesItemId], references: [id], onDelete: Cascade)
+  quantity     Int      @default(1)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([cartId, clothesItemId])
 }
 
 model VerificationToken {

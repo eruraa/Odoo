@@ -92,7 +92,8 @@ export async function POST(request: NextRequest) {
         color,
         imageUrl: finalImageUrl,
         price: price ? parseFloat(price) : null,
-        userId: user.id
+        userId: user.id,
+        isAvailable: true // Ensure item is available by default
       }
     })
 
