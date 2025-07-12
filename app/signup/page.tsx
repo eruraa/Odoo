@@ -24,9 +24,21 @@ export default function SignUpPage() {
 
   const handleGoogleSignUp = async () => {
     try {
-      await signIn("google", { callbackUrl: "/main" })
+      console.log('Starting Google sign up...')
+      const result = await signIn("google", { 
+        callbackUrl: "/main",
+        redirect: false 
+      })
+      console.log('Google sign up result:', result)
+      if (result?.error) {
+        console.error('Google sign up error:', result.error)
+        setError(result.error)
+      } else if (result?.ok) {
+        router.push('/main')
+      }
     } catch (error) {
       console.error("Sign up error:", error)
+      setError('Failed to sign up with Google')
     }
   }
 
@@ -35,7 +47,7 @@ export default function SignUpPage() {
     setError('')
     setLoading(true)
     try {
-      const res = await fetch('/api/auth/register', {
+      const res = await fetch('/api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, name }),
@@ -190,4 +202,4 @@ export default function SignUpPage() {
       </div>
     </div>
   )
-} 
+}

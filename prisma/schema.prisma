@@ -41,16 +41,54 @@ model Session {
 }
 
 model User {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  name           String?
+  email          String?  @unique
+  emailVerified  DateTime?
+  image          String?
   hashedPassword String?
-  accounts      Account[]
-  sessions      Session[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  accounts       Account[]
+  sessions       Session[]
+  clothes        ClothesItem[]
+  swaps          Swap[]
+  acceptedSwaps  Swap[]   @relation("AcceptedBy")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model ClothesItem {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String?
+  category    String
+  size        String?
+  condition   String
+  brand       String?
+  color       String?
+  imageUrl    String?
+  price       Float?
+  isAvailable Boolean  @default(true)
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  swaps       Swap[]
+  requestedSwaps Swap[] @relation("RequestedItem")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Swap {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  status        SwapStatus @default(PENDING)
+  offeredItemId String
+  offeredItem   ClothesItem @relation(fields: [offeredItemId], references: [id], onDelete: Cascade)
+  requestedItemId String?
+  requestedItem   ClothesItem? @relation("RequestedItem", fields: [requestedItemId], references: [id], onDelete: SetNull)
+  offeredBy     String
+  offeredByUser User     @relation(fields: [offeredBy], references: [id], onDelete: Cascade)
+  acceptedBy    String?
+  acceptedByUser User?   @relation("AcceptedBy", fields: [acceptedBy], references: [id], onDelete: SetNull)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model VerificationToken {
@@ -60,4 +98,12 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+enum SwapStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  COMPLETED
+  CANCELLED
 }

@@ -97,6 +97,9 @@ export default function MainPage() {
               <button className="p-2 text-gray-600 hover:text-primary-600 transition-colors">
                 <ShoppingCart className="h-6 w-6" />
               </button>
+              <Link href="/profile" className="text-gray-700 hover:text-primary-600 transition-colors font-medium">
+                Profile
+              </Link>
               <div className="relative">
                 <button className="p-2 text-gray-600 hover:text-primary-600 transition-colors">
                   <UserProfile />
