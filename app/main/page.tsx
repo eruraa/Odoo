@@ -1,11 +1,14 @@
 'use client'
 
-import React, { useState } from 'react'
+import React from 'react'
 import Link from 'next/link'
-import { Search, Filter, Heart, ShoppingCart, User, LogOut } from 'lucide-react'
+import { Search, Filter, Heart, ShoppingCart } from 'lucide-react'
+import { ProtectedRoute } from '../components/ProtectedRoute'
+import { UserProfile } from '../components/UserProfile'
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
 import { useWishlist } from '../contexts/WishlistContext'
 import Toast from '../components/Toast'
+import { useState } from 'react'
 
 export default function MainPage() {
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist()
@@ -109,30 +112,32 @@ export default function MainPage() {
   const conditions = ["All", "Excellent", "Good", "Fair"]
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Navigation */}
-      <nav className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <Link href="/" className="text-2xl font-bold text-primary-600">
-                Re-wear
-              </Link>
-            </div>
-            
-            {/* Search Bar */}
-            <div className="flex-1 max-w-lg mx-8">
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Search className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  type="text"
-                  placeholder="Search for sustainable fashion..."
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                />
+    <ProtectedRoute>
+      <div className="min-h-screen bg-gray-50">
+        {/* Navigation */}
+        <nav className="bg-white shadow-sm border-b border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center h-16">
+              <div className="flex items-center">
+                <Link href="/" className="text-2xl font-bold text-primary-600">
+                  Re-wear
+                </Link>
               </div>
-            </div>
+              </div>
+              
+              {/* Search Bar */}
+              <div className="flex-1 max-w-lg mx-8">
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Search className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Search for sustainable fashion..."
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  />
+                </div>
+              </div>
 
             <div className="flex items-center space-x-4">
               <Link href="/wishlist" className="p-2 text-gray-600 hover:text-primary-600 transition-colors">
@@ -143,13 +148,12 @@ export default function MainPage() {
               </button>
               <div className="relative">
                 <button className="p-2 text-gray-600 hover:text-primary-600 transition-colors">
-                  <User className="h-6 w-6" />
+                  <UserProfile />
                 </button>
               </div>
             </div>
           </div>
-        </div>
-      </nav>
+        </nav>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Filters and Sort */}
@@ -350,5 +354,6 @@ export default function MainPage() {
         onClose={() => setToast(prev => ({ ...prev, isVisible: false }))}
       />
     </div>
+  </ProtectedRoute>
   )
 } 

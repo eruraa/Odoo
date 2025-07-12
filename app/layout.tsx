@@ -4,8 +4,8 @@ import './globals.css'
 import { WishlistProvider } from './contexts/WishlistContext'
 
 export const metadata: Metadata = {
-  title: 'Re-wear - Sustainable Fashion Marketplace',
-  description: 'Buy and sell pre-loved clothing. Give fashion a second life with Re-wear.',
+  title: 'Swap.Save.Sustain',
+  description: 'Turn yesterday\'s clothes into tomorrow\'s style. ReWear it forward.',
   keywords: 'sustainable fashion, second-hand clothing, pre-loved, fashion marketplace, eco-friendly',
 }
 
