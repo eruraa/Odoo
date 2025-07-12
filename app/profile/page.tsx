@@ -33,6 +33,7 @@ export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState<'clothes' | 'swaps'>('clothes')
   const [clothes, setClothes] = useState<ClothesItem[]>([])
   const [swaps, setSwaps] = useState<Swap[]>([])
+  const [points, setPoints] = useState(0)
   const [loading, setLoading] = useState(true)
   const [showAddForm, setShowAddForm] = useState(false)
   const [editingItem, setEditingItem] = useState<ClothesItem | null>(null)
@@ -48,6 +49,8 @@ export default function ProfilePage() {
     imageUrl: '',
     price: ''
   })
+  const [selectedImage, setSelectedImage] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -57,9 +60,10 @@ export default function ProfilePage() {
 
   const fetchUserData = async () => {
     try {
-      const [clothesRes, swapsRes] = await Promise.all([
+      const [clothesRes, swapsRes, pointsRes] = await Promise.all([
         fetch('/api/profile/clothes'),
-        fetch('/api/profile/swaps')
+        fetch('/api/profile/swaps'),
+        fetch('/api/profile/points')
       ])
       
       if (clothesRes.ok) {
@@ -70,6 +74,11 @@ export default function ProfilePage() {
       if (swapsRes.ok) {
         const swapsData = await swapsRes.json()
         setSwaps(swapsData)
+      }
+
+      if (pointsRes.ok) {
+        const pointsData = await pointsRes.json()
+        setPoints(pointsData.points)
       }
     } catch (error) {
       console.error('Error fetching user data:', error)
@@ -88,21 +97,33 @@ export default function ProfilePage() {
     const method = editingItem ? 'PUT' : 'POST'
     
     try {
+      const formDataToSend = new FormData()
+      formDataToSend.append('title', formData.title)
+      formDataToSend.append('description', formData.description)
+      formDataToSend.append('category', formData.category)
+      formDataToSend.append('size', formData.size)
+      formDataToSend.append('condition', formData.condition)
+      formDataToSend.append('brand', formData.brand)
+      formDataToSend.append('color', formData.color)
+      formDataToSend.append('price', formData.price || '')
+      
+      if (selectedImage) {
+        formDataToSend.append('image', selectedImage)
+      } else if (formData.imageUrl) {
+        formDataToSend.append('imageUrl', formData.imageUrl)
+      }
+
       const response = await fetch(url, {
         method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          price: formData.price ? parseFloat(formData.price) : null
-        }),
+        body: formDataToSend,
       })
 
       if (response.ok) {
         setShowAddForm(false)
         setEditingItem(null)
         resetForm()
+        setSelectedImage(null)
+        setImagePreview(null)
         fetchUserData()
       }
     } catch (error) {
@@ -139,6 +160,8 @@ export default function ProfilePage() {
       imageUrl: item.imageUrl || '',
       price: item.price?.toString() || ''
     })
+    setSelectedImage(null)
+    setImagePreview(null)
     setShowAddForm(true)
   }
 
@@ -154,6 +177,8 @@ export default function ProfilePage() {
       imageUrl: '',
       price: ''
     })
+    setSelectedImage(null)
+    setImagePreview(null)
   }
 
   const getStatusColor = (status: string) => {
@@ -180,21 +205,36 @@ export default function ProfilePage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
-          <div className="flex items-center space-x-4">
-            {user?.image ? (
-              <img
-                src={user.image}
-                alt={user.name || 'User'}
-                className="w-16 h-16 rounded-full"
-              />
-            ) : (
-              <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center">
-                <User className="w-8 h-8 text-primary-600" />
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              {user?.image ? (
+                <img
+                  src={user.image}
+                  alt={user.name || 'User'}
+                  className="w-16 h-16 rounded-full"
+                />
+              ) : (
+                <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center">
+                  <User className="w-8 h-8 text-primary-600" />
+                </div>
+              )}
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">{user?.name}</h1>
+                <p className="text-gray-600">{user?.email}</p>
               </div>
-            )}
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">{user?.name}</h1>
-              <p className="text-gray-600">{user?.email}</p>
+            </div>
+            
+            {/* Points Display */}
+            <div className="bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-lg p-4 text-center">
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                  <span className="text-lg">⭐</span>
+                </div>
+                <div>
+                  <p className="text-sm font-medium opacity-90">Points Balance</p>
+                  <p className="text-2xl font-bold">{points.toLocaleString()}</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -349,14 +389,76 @@ export default function ProfilePage() {
                         </div>
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Image URL
+                            Image
                           </label>
-                          <input
-                            type="url"
-                            value={formData.imageUrl}
-                            onChange={(e) => setFormData({...formData, imageUrl: e.target.value})}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-                          />
+                          <div className="space-y-3">
+                            {/* Image Upload */}
+                            <div className="flex items-center space-x-4">
+                              <label className="flex items-center justify-center w-32 h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-primary-500 transition-colors">
+                                <div className="text-center">
+                                  {imagePreview ? (
+                                    <img
+                                      src={imagePreview}
+                                      alt="Preview"
+                                      className="w-full h-full object-cover rounded-lg"
+                                    />
+                                  ) : (
+                                    <div>
+                                      <div className="text-gray-400 mb-2">
+                                        <svg className="w-8 h-8 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                        </svg>
+                                      </div>
+                                      <p className="text-xs text-gray-500">Upload Image</p>
+                                    </div>
+                                  )}
+                                  <input
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    onChange={(e) => {
+                                      const file = e.target.files?.[0]
+                                      if (file) {
+                                        setSelectedImage(file)
+                                        setImagePreview(URL.createObjectURL(file))
+                                        setFormData({...formData, imageUrl: ''})
+                                      }
+                                    }}
+                                  />
+                                </div>
+                              </label>
+                              
+                              {/* Or URL Input */}
+                              <div className="flex-1">
+                                <p className="text-xs text-gray-500 mb-2">Or enter image URL:</p>
+                                <input
+                                  type="url"
+                                  value={formData.imageUrl}
+                                  onChange={(e) => {
+                                    setFormData({...formData, imageUrl: e.target.value})
+                                    setSelectedImage(null)
+                                    setImagePreview(null)
+                                  }}
+                                  placeholder="https://example.com/image.jpg"
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
+                                />
+                              </div>
+                            </div>
+                            
+                            {/* Remove Image Button */}
+                            {(selectedImage || imagePreview) && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setSelectedImage(null)
+                                  setImagePreview(null)
+                                }}
+                                className="text-red-600 hover:text-red-700 text-sm font-medium"
+                              >
+                                Remove Image
+                              </button>
+                            )}
+                          </div>
                         </div>
                       </div>
                       <div>

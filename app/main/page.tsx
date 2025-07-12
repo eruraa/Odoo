@@ -6,6 +6,7 @@ import { Search, Filter, Heart, ShoppingCart } from 'lucide-react'
 import { ProtectedRoute } from '../components/ProtectedRoute'
 import { UserProfile } from '../components/UserProfile'
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
+import { GiClothes } from 'react-icons/gi'
 import { useWishlist } from '../contexts/WishlistContext'
 import Toast from '../components/Toast'
 import { getAllProducts } from '../data/products'
@@ -54,15 +55,17 @@ export default function MainPage() {
         {/* Navigation */}
         <nav className="bg-white shadow-sm border-b border-gray-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-16">
-              <div className="flex items-center">
-                <Link href="/" className="text-2xl font-bold text-primary-600">
-                  Re-wear
+            <div className="flex items-center h-16">
+              {/* Logo - Extreme Left */}
+              <div className="flex items-center mr-8">
+                <Link href="/" className="flex items-center space-x-2 text-2xl font-bold text-primary-600">
+                  <GiClothes className="w-8 h-8" />
+                  <span>Re-wear</span>
                 </Link>
               </div>
               
-              {/* Simplified Navigation */}
-              <div className="flex items-center space-x-8">
+              {/* Navigation Links */}
+              <div className="flex items-center space-x-8 mr-8">
                 <Link href="/" className="text-gray-700 hover:text-primary-600 transition-colors font-medium">
                   Home
                 </Link>
@@ -74,7 +77,7 @@ export default function MainPage() {
                 </Link>
               </div>
               
-              {/* Search Bar */}
+              {/* Search Bar - Center */}
               <div className="flex-1 max-w-lg mx-8">
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -90,24 +93,25 @@ export default function MainPage() {
                 </div>
               </div>
 
-            <div className="flex items-center space-x-4">
-              <Link href="/wishlist" className="p-2 text-gray-600 hover:text-primary-600 transition-colors">
-                <Heart className="h-6 w-6" />
-              </Link>
-              <button className="p-2 text-gray-600 hover:text-primary-600 transition-colors">
-                <ShoppingCart className="h-6 w-6" />
-              </button>
-              <Link href="/profile" className="text-gray-700 hover:text-primary-600 transition-colors font-medium">
-                Profile
-              </Link>
-              <div className="relative">
+              {/* Right Side Icons */}
+              <div className="flex items-center space-x-4">
+                <Link href="/wishlist" className="p-2 text-gray-600 hover:text-primary-600 transition-colors">
+                  <Heart className="h-6 w-6" />
+                </Link>
                 <button className="p-2 text-gray-600 hover:text-primary-600 transition-colors">
-                  <UserProfile />
+                  <ShoppingCart className="h-6 w-6" />
                 </button>
+                <Link href="/profile" className="text-gray-700 hover:text-primary-600 transition-colors font-medium">
+                  Profile
+                </Link>
+                <div className="relative">
+                  <button className="p-2 text-gray-600 hover:text-primary-600 transition-colors">
+                    <UserProfile />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
         </nav>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -153,28 +157,24 @@ export default function MainPage() {
                 <p className="text-sm text-gray-600 mb-2">
                   by {product.seller}
                 </p>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-lg font-bold text-eco-600">
-                      {product.points} pts
-                    </span>
-                    <span className="text-sm text-gray-500 line-through">
-                      {product.originalPoints} pts
-                    </span>
-                  </div>
-                  <div className="relative group">
-                    <button className="btn-eco text-sm px-3 py-1">
-                      Swap Now
-                    </button>
+                                                  <div className="space-y-3">
+                  {/* Points and Swap Button Row */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-lg font-bold text-eco-600">
+                        {product.points} pts
+                      </span>
+                    </div>
+                    <div className="relative group">
+                      <button className="bg-eco-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-eco-700 transition-colors">
+                        Swap Now
+                      </button>
                       
                       {/* Tooltip/Overlay */}
                       <div className="absolute bottom-full right-0 mb-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none group-hover:pointer-events-auto z-10">
                         <div className="p-4">
                           <div className="flex items-center justify-between mb-3">
                             <h4 className="font-semibold text-gray-900 text-sm">Swap Details</h4>
-                            <button className="text-gray-400 hover:text-gray-600 transition-colors">
-                              <Heart className="h-4 w-4" />
-                            </button>
                           </div>
                           
                           <div className="space-y-2 text-sm">
@@ -200,26 +200,21 @@ export default function MainPage() {
                           </div>
                           
                           <div className="mt-3 pt-3 border-t border-gray-100">
-                            <div className="flex space-x-2">
-                              <button className="flex-1 bg-eco-600 text-white py-2 px-3 rounded text-sm hover:bg-eco-700 transition-colors">
-                                Confirm Swap
-                              </button>
-                              <button className="flex-1 bg-gray-100 text-gray-700 py-2 px-3 rounded text-sm hover:bg-gray-200 transition-colors flex items-center justify-center">
-                                <Heart className="h-4 w-4 mr-1" />
-                                Wishlist
-                              </button>
-                            </div>
+                            <button className="w-full bg-eco-600 text-white py-2 px-3 rounded text-sm hover:bg-eco-700 transition-colors">
+                              Confirm Swap
+                            </button>
                           </div>
                         </div>
                         
                         {/* Arrow */}
                         <div className="absolute top-full right-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white"></div>
                       </div>
+                    </div>
                   </div>
                   
                   {/* Water Saving Badge */}
-                  <div className="mt-2">
-                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-800">
+                  <div className="flex justify-center">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-800 border border-blue-200">
                       💧 You saved {Math.floor(Math.random() * 500) + 200}L of water!
                     </span>
                   </div>

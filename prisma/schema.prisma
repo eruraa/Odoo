@@ -47,6 +47,7 @@ model User {
   emailVerified  DateTime?
   image          String?
   hashedPassword String?
+  points         Int      @default(0)
   accounts       Account[]
   sessions       Session[]
   clothes        ClothesItem[]
