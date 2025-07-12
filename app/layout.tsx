@@ -2,6 +2,7 @@ import React from 'react'
 import type { Metadata } from 'next'
 import './globals.css'
 import { WishlistProvider } from './contexts/WishlistContext'
+import { Providers } from './providers'
 
 export const metadata: Metadata = {
   title: 'Swap.Save.Sustain',
@@ -9,17 +10,13 @@ export const metadata: Metadata = {
   keywords: 'sustainable fashion, second-hand clothing, pre-loved, fashion marketplace, eco-friendly',
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-gray-50">
-        <WishlistProvider>
+      <body>
+        <Providers>
           {children}
-        </WishlistProvider>
+        </Providers>
       </body>
     </html>
   )
