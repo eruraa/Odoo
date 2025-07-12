@@ -1,17 +1,14 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
-import { Search, Filter, Heart, ShoppingCart } from 'lucide-react'
-import { ProtectedRoute } from '../components/ProtectedRoute'
-import { UserProfile } from '../components/UserProfile'
+import { Search, Heart, ShoppingCart, User } from 'lucide-react'
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
 import { useWishlist } from '../contexts/WishlistContext'
 import Toast from '../components/Toast'
-import { getAllProducts } from '../data/products'
-import { useState } from 'react'
+import { getProductsByGender } from '../data/products'
 
-export default function MainPage() {
+export default function MenPage() {
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist()
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error'; isVisible: boolean }>({
     message: '',
@@ -34,11 +31,11 @@ export default function MainPage() {
     }
   }
 
-  // Get all products from shared data
-  const allProducts = getAllProducts()
+  // Get men's products from shared data
+  const allMenProducts = getProductsByGender('men')
 
   // Filter products based on search query
-  const filteredProducts = allProducts.filter((product: any) => {
+  const filteredProducts = allMenProducts.filter(product => {
     const searchTerm = searchQuery.toLowerCase()
     return (
       product.name.toLowerCase().includes(searchTerm) ||
@@ -49,46 +46,45 @@ export default function MainPage() {
   })
 
   return (
-    <ProtectedRoute>
-      <div className="min-h-screen bg-gray-50">
-        {/* Navigation */}
-        <nav className="bg-white shadow-sm border-b border-gray-200">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-16">
-              <div className="flex items-center">
-                <Link href="/" className="text-2xl font-bold text-primary-600">
-                  Re-wear
-                </Link>
-              </div>
-              
-              {/* Simplified Navigation */}
-              <div className="flex items-center space-x-8">
-                <Link href="/" className="text-gray-700 hover:text-primary-600 transition-colors font-medium">
-                  Home
-                </Link>
-                <Link href="/women" className="text-gray-700 hover:text-primary-600 transition-colors font-medium">
-                  Women
-                </Link>
-                <Link href="/men" className="text-gray-700 hover:text-primary-600 transition-colors font-medium">
-                  Men
-                </Link>
-              </div>
-              
-              {/* Search Bar */}
-              <div className="flex-1 max-w-lg mx-8">
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Search className="h-5 w-5 text-gray-400" />
-                  </div>
-                  <input
-                    type="text"
-                    placeholder="Search for sustainable fashion..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                  />
+    <div className="min-h-screen bg-gray-50">
+      {/* Navigation */}
+      <nav className="bg-white shadow-sm border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center">
+              <Link href="/" className="text-2xl font-bold text-primary-600">
+                Re-wear
+              </Link>
+            </div>
+            
+            {/* Simplified Navigation */}
+            <div className="flex items-center space-x-8">
+              <Link href="/" className="text-gray-700 hover:text-primary-600 transition-colors font-medium">
+                Home
+              </Link>
+              <Link href="/women" className="text-gray-700 hover:text-primary-600 transition-colors font-medium">
+                Women
+              </Link>
+              <Link href="/men" className="text-primary-600 font-medium">
+                Men
+              </Link>
+            </div>
+            
+            {/* Search Bar */}
+            <div className="flex-1 max-w-lg mx-8">
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Search className="h-5 w-5 text-gray-400" />
                 </div>
+                <input
+                  type="text"
+                  placeholder="Search men's fashion..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                />
               </div>
+            </div>
 
             <div className="flex items-center space-x-4">
               <Link href="/wishlist" className="p-2 text-gray-600 hover:text-primary-600 transition-colors">
@@ -99,28 +95,38 @@ export default function MainPage() {
               </button>
               <div className="relative">
                 <button className="p-2 text-gray-600 hover:text-primary-600 transition-colors">
-                  <UserProfile />
+                  <User className="h-6 w-6" />
                 </button>
               </div>
             </div>
           </div>
         </div>
-        </nav>
+      </nav>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">
-            Discover Sustainable Fashion
+            Men's Fashion
           </h1>
           <p className="text-gray-600">
-            Browse our collection of pre-loved clothing and accessories
+            Discover sustainable men's clothing and accessories
           </p>
         </div>
 
+        {/* Search Results */}
+        {searchQuery && (
+          <div className="mb-6">
+            <p className="text-sm text-gray-600">
+              {filteredProducts.length} result{filteredProducts.length !== 1 ? 's' : ''} for "{searchQuery}"
+            </p>
+          </div>
+        )}
+
         {/* Products Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredProducts.map((product: any) => (
+        {filteredProducts.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {filteredProducts.map((product) => (
             <div key={product.id} className="card hover:shadow-lg transition-shadow duration-200">
               <div className="relative">
                 <img
@@ -223,15 +229,24 @@ export default function MainPage() {
                 </div>
               </div>
             </div>
-          ))}
-        </div>
+                      ))}
+          </div>
+        ) : searchQuery ? (
+          <div className="text-center py-12">
+            <div className="text-6xl mb-4">🧐</div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">No items found</h3>
+            <p className="text-gray-600">Try adjusting your search terms</p>
+          </div>
+        ) : null}
 
         {/* Load More */}
-        <div className="text-center mt-12">
-          <button className="btn-secondary px-8 py-3">
-            Load More Items
-          </button>
-        </div>
+        {filteredProducts.length > 0 && (
+          <div className="text-center mt-12">
+            <button className="btn-secondary px-8 py-3">
+              Load More Items
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Stats Section */}
@@ -239,20 +254,20 @@ export default function MainPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Making a Difference Together
+              Men's Fashion Impact
             </h2>
             <div className="grid md:grid-cols-3 gap-8 mt-8">
               <div>
-                <div className="text-3xl font-bold text-primary-600 mb-2">2,847</div>
-                <div className="text-gray-600">Items Saved from Landfill</div>
+                <div className="text-3xl font-bold text-primary-600 mb-2">1,600</div>
+                <div className="text-gray-600">Men's Items Saved</div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-eco-600 mb-2">45,230</div>
-                <div className="text-gray-600">Points Earned by Community</div>
+                <div className="text-3xl font-bold text-eco-600 mb-2">26,780</div>
+                <div className="text-gray-600">Points Earned by Men</div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-secondary-600 mb-2">456</div>
-                <div className="text-gray-600">Active Swappers</div>
+                <div className="text-3xl font-bold text-secondary-600 mb-2">222</div>
+                <div className="text-gray-600">Active Men Swappers</div>
               </div>
             </div>
           </div>
@@ -267,6 +282,5 @@ export default function MainPage() {
         onClose={() => setToast(prev => ({ ...prev, isVisible: false }))}
       />
     </div>
-    </ProtectedRoute>
   )
 } 

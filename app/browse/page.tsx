@@ -25,22 +25,16 @@ export default function BrowsePage() {
               </Link>
             </div>
 
-            {/* Desktop Navigation */}
+            {/* Simplified Navigation */}
             <div className="hidden md:flex items-center space-x-8">
               <Link href="/" className="text-white hover:text-beige-200 transition-colors font-medium">
                 Home
               </Link>
-              <Link href="/browse" className="text-white hover:text-beige-200 transition-colors font-medium">
-                Browse
+              <Link href="/women" className="text-white hover:text-beige-200 transition-colors font-medium">
+                Women
               </Link>
-              <Link href="/closet" className="text-white hover:text-beige-200 transition-colors font-medium">
-                My Closet
-              </Link>
-              <Link href="/points" className="text-white hover:text-beige-200 transition-colors font-medium">
-                Earn Points
-              </Link>
-              <Link href="/why-rewear" className="text-white hover:text-beige-200 transition-colors font-medium">
-                Why ReWear?
+              <Link href="/men" className="text-white hover:text-beige-200 transition-colors font-medium">
+                Men
               </Link>
             </div>
 
@@ -155,37 +149,37 @@ export default function BrowsePage() {
           </div>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div className="group cursor-pointer">
+            <Link href="/women" className="group cursor-pointer">
               <div className="bg-beige-100 rounded-lg p-6 text-center hover:bg-beige-200 transition-colors duration-300">
                 <div className="text-4xl mb-4">👗</div>
                 <h3 className="text-lg font-semibold text-eco-800">Women</h3>
                 <p className="text-sm text-eco-600 mt-2">Fashion for her</p>
               </div>
-            </div>
+            </Link>
             
-            <div className="group cursor-pointer">
+            <Link href="/men" className="group cursor-pointer">
               <div className="bg-beige-100 rounded-lg p-6 text-center hover:bg-beige-200 transition-colors duration-300">
                 <div className="text-4xl mb-4">👔</div>
                 <h3 className="text-lg font-semibold text-eco-800">Men</h3>
                 <p className="text-sm text-eco-600 mt-2">Style for him</p>
               </div>
-            </div>
+            </Link>
             
-            <div className="group cursor-pointer">
-              <div className="bg-beige-100 rounded-lg p-6 text-center hover:bg-beige-200 transition-colors duration-300">
-                <div className="text-4xl mb-4">📏</div>
-                <h3 className="text-lg font-semibold text-eco-800">Shop by Size</h3>
-                <p className="text-sm text-eco-600 mt-2">Perfect fit</p>
-              </div>
-            </div>
-            
-            <div className="group cursor-pointer">
+            <Link href="/" className="group cursor-pointer">
               <div className="bg-beige-100 rounded-lg p-6 text-center hover:bg-beige-200 transition-colors duration-300">
                 <div className="text-4xl mb-4">🏠</div>
                 <h3 className="text-lg font-semibold text-eco-800">Home</h3>
                 <p className="text-sm text-eco-600 mt-2">Back to start</p>
               </div>
-            </div>
+            </Link>
+            
+            <Link href="/wishlist" className="group cursor-pointer">
+              <div className="bg-beige-100 rounded-lg p-6 text-center hover:bg-beige-200 transition-colors duration-300">
+                <div className="text-4xl mb-4">❤️</div>
+                <h3 className="text-lg font-semibold text-eco-800">Wishlist</h3>
+                <p className="text-sm text-eco-600 mt-2">Saved items</p>
+              </div>
+            </Link>
           </div>
         </div>
       </section>
