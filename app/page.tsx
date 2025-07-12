@@ -33,7 +33,7 @@ export default function LandingPage() {
               <span className="text-primary-600"> Second Life</span>
             </h1>
             <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-              Buy and sell pre-loved clothing. Join the sustainable fashion revolution and make a positive impact on the environment.
+              Swap clothes and earn points. Join the sustainable fashion revolution and make a positive impact on the environment.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/signup" className="btn-primary text-lg px-8 py-3 flex items-center justify-center">
@@ -85,11 +85,72 @@ export default function LandingPage() {
               <div className="bg-eco-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <ShoppingBag className="h-8 w-8 text-eco-600" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">Quality Assured</h3>
+              <h3 className="text-xl font-semibold mb-2">Points System</h3>
               <p className="text-gray-600">
-                All items are carefully verified to ensure you get the best pre-loved fashion.
+                Earn points for every swap and unlock exclusive benefits as you participate more.
               </p>
             </div>
+          </div>
+          
+          {/* Learn More Button */}
+          <div className="text-center mt-12">
+            <Link href="/why-rewear" className="btn-primary text-lg px-8 py-3">
+              Learn More About ReWear
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Why ReWear Section */}
+      <section className="py-20 bg-beige-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold text-eco-800 mb-4">
+              Why ReWear?
+            </h2>
+            <p className="text-lg text-eco-700 max-w-2xl mx-auto">
+              Join thousands of eco-conscious fashion lovers making a difference
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="text-center">
+              <div className="text-4xl mb-4">♻️</div>
+              <h3 className="text-xl font-bold text-eco-800 mb-2">Eco-Friendly</h3>
+              <p className="text-eco-700">
+                Every swap saves resources and reduces fashion waste. Join the movement for a greener planet!
+              </p>
+            </div>
+            
+            <div className="text-center">
+              <div className="text-4xl mb-4">💸</div>
+              <h3 className="text-xl font-bold text-eco-800 mb-2">Save & Earn</h3>
+              <p className="text-eco-700">
+                Swap instead of shop! Earn points for every exchange and save money while refreshing your closet.
+              </p>
+            </div>
+            
+            <div className="text-center">
+              <div className="text-4xl mb-4">🛍️</div>
+              <h3 className="text-xl font-bold text-eco-800 mb-2">Curated Styles</h3>
+              <p className="text-eco-700">
+                Discover unique, quality-checked pieces from the community. Find your next favorite look!
+              </p>
+            </div>
+            
+            <div className="text-center">
+              <div className="text-4xl mb-4">👥</div>
+              <h3 className="text-xl font-bold text-eco-800 mb-2">Community First</h3>
+              <p className="text-eco-700">
+                Connect with like-minded swappers. Share, support, and grow a sustainable fashion community.
+              </p>
+            </div>
+          </div>
+          
+          <div className="text-center mt-12">
+            <Link href="/why-rewear" className="btn-eco text-lg px-8 py-3">
+              Learn More About ReWear
+            </Link>
           </div>
         </div>
       </section>
@@ -101,7 +162,7 @@ export default function LandingPage() {
             Ready to Join the Movement?
           </h2>
           <p className="text-xl text-primary-100 mb-8 max-w-2xl mx-auto">
-            Start your sustainable fashion journey today. Sign up and begin buying or selling pre-loved clothing.
+            Start your sustainable fashion journey today. Sign up and begin swapping clothes to earn points.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/signup" className="bg-white text-primary-600 hover:bg-gray-50 font-medium py-3 px-8 rounded-lg transition-colors duration-200">
